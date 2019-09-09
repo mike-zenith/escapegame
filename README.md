@@ -1,5 +1,4 @@
 # EscapeGame
-===
 
 Escape game developed live on [twitch.tv/mikezenith](https://twitch.tv/mikezenith).
 
@@ -7,7 +6,7 @@ I recommend using VSCode for this projects to have the same set up as you can se
 
 # SetUp
 
-- Install node.js (check version @[package.json#engines.node](https://github.com/mikezenith/escape/blob/master/package.json)`)
+- Install node.js (check version @[package.json#engines.node](https://github.com/mike-zenith/escapegame/blob/master/package.json)`)
 - Install yarn
 - Run `yarn install`
 
