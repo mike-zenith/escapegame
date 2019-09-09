@@ -9,6 +9,9 @@
     "test": "jest --forceExit --verbose",
     "test:watch": "npm run test -- --watchAll"
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "author": "mikezenith",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
