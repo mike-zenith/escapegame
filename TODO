@@ -1,0 +1,25 @@
+Todo:
+  + Server - Client separation
+  ☐ Player
+    ☐ Roll
+      ☐ Dices
+        + Server authority
+        ☐ Sides -> action
+    ☐ Actions (context-specific)
+      ☐ Requirement (n* side)
+
+      ☐ Discover new chamber
+        ☐ Drag a card -> Hand
+          + Server authority
+          ☐ Place the card -> Position
+            + Server authority
+            ☐ Place card -> Hand => empty
+      ☐ Move to chamber
+      ✘ Place diamond(s) @cancelled(19-09-08 20:21)
+      ☐ Escape
+
+
+
+
+
+
