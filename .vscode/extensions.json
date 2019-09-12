@@ -1,6 +1,5 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "fabiospampinato.vscode-todo-plus"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint"
+  ]
 }
