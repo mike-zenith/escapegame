@@ -1,26 +1,6 @@
 import { Dice, DiceFace, CannotRollException } from "../src/Dice";
+import { DicePack } from "../src/DicePack";
 import { createFakeDiceRoller } from "./fakes/DiceRoller";
-
-class DicePack {
-  constructor(private dices: Dice[]) { }
-
-  public roll(selectedDices?: DiceFace[]): DiceFace[] {
-    if (selectedDices && selectedDices.length) {
-      return selectedDices.map(diceFace => {
-        const foundDice = this.dices.find(dice =>
-          dice.isRolledFaceEqual(diceFace)
-        );
-        if (!foundDice) {
-          throw new CannotRollException();
-        }
-        return foundDice.roll();
-      });
-    }
-    return this.dices
-      .filter(dice => dice.isRollable())
-      .map(dice => dice.roll());
-  }
-}
 
 describe("Dice pack", () => {
   it("rolls all rollable dices, resulting in rollfaces", () => {
@@ -84,18 +64,84 @@ describe("Dice pack", () => {
     );
   });
 
-  it("can roll selected cursed face when selecting yellow", () => {
+  it("can roll when selecting yellow dice with cursed dice", () => {
     const dices = [
       new Dice(createFakeDiceRoller(DiceFace.BLACK)),
       new Dice(createFakeDiceRoller(DiceFace.RED)),
       new Dice(createFakeDiceRoller(DiceFace.YELLOW))
     ];
 
-    const expectedOutput = [DiceFace.BLACK, DiceFace.YELLOW];
+    const expectedOutput = [DiceFace.BLACK, DiceFace.YELLOW, DiceFace.RED];
 
     const dicePack = new DicePack(dices);
-    expect(dicePack.roll([DiceFace.BLACK, DiceFace.YELLOW])).toStrictEqual(
+    expect(dicePack.roll([DiceFace.BLACK, DiceFace.YELLOW, DiceFace.RED])).toStrictEqual(
       expectedOutput
     );
+  });
+
+  it("cannot roll when selecting yellow dice with 3 cursed dice", () => {
+    const dices = [
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.RED)),
+      new Dice(createFakeDiceRoller(DiceFace.YELLOW))
+    ];
+
+    const dicePack = new DicePack(dices);
+    const rollWithSelectedDicesThrowsException = () => {
+      dicePack.roll([
+        DiceFace.BLACK,
+        DiceFace.BLACK,
+        DiceFace.BLACK,
+        DiceFace.YELLOW,
+        DiceFace.RED
+      ]);
+    };
+    expect(rollWithSelectedDicesThrowsException).toThrowError(CannotRollException);
+  });
+
+  it("rolls with rollable dices when having yellow with 2 cursed dices", () => {
+    const dices = [
+      new Dice(createFakeDiceRoller(DiceFace.GREEN)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.RED)),
+      new Dice(createFakeDiceRoller(DiceFace.YELLOW))
+    ];
+
+    const expectedDiceFaces = [DiceFace.GREEN, DiceFace.BLACK, DiceFace.BLACK, DiceFace.RED, DiceFace.YELLOW];
+
+    const dicePack = new DicePack(dices);
+    expect(dicePack.roll()).toStrictEqual(expectedDiceFaces);
+  });
+
+  it("rolls with rollable dices when having yellow with 3 cursed dices", () => {
+    const dices = [
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.RED)),
+      new Dice(createFakeDiceRoller(DiceFace.YELLOW))
+    ];
+
+    const expectedDiceFaces = [DiceFace.RED, DiceFace.YELLOW, DiceFace.BLACK, DiceFace.BLACK];
+
+    const dicePack = new DicePack(dices);
+    expect(dicePack.roll()).toStrictEqual(expectedDiceFaces);
+  });
+
+  it("rolls with uncursed black dice with one yellow", () => {
+    const dices = [
+      new Dice(createFakeDiceRoller(DiceFace.BLACK)),
+      new Dice(createFakeDiceRoller(DiceFace.GREEN)),
+      new Dice(createFakeDiceRoller(DiceFace.GREEN)),
+      new Dice(createFakeDiceRoller(DiceFace.RED)),
+      new Dice(createFakeDiceRoller(DiceFace.YELLOW))
+    ];
+
+    const expectedDiceFaces = [DiceFace.BLACK, DiceFace.GREEN, DiceFace.GREEN, DiceFace.RED, DiceFace.YELLOW];
+    const dicePack = new DicePack(dices);
+    expect(dicePack.roll()).toStrictEqual(expectedDiceFaces);
   });
 });

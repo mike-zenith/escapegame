@@ -7,9 +7,4 @@ describe("Dice", () => {
     const face = dice.roll();
     expect(Object.values(DiceFace)).toContainEqual(face);
   });
-
-  it("cannot be rolled when face is cursed", () => {
-    const dice = new Dice(createFakeDiceRoller(DiceFace.BLACK));
-    expect(() => dice.roll()).toThrowError(CannotRollException);
-  });
 });

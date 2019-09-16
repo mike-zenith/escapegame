@@ -20,9 +20,6 @@ export class Dice {
   }
 
   public roll(): DiceFace {
-    if (this.rolledFace && this.rolledFace === DiceFace.BLACK) {
-      throw new CannotRollException();
-    }
     this.rolledFace = this.diceRoller();
     return this.rolledFace;
   }
